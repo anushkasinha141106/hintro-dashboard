@@ -4,7 +4,7 @@ A responsive dashboard web app built for the Hintro Frontend Developer Internshi
 
 ## Live Demo
 
-[View Deployed App](https://hintro-dashboard-app.vercel.app/dashboard)
+[View Deployed Site](https://hintro-dashboard-app.vercel.app)
 
 ## GitHub Repository
 
