@@ -1,0 +1,23 @@
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 12px;
+  color: var(--color-text-muted);
+}
+
+.cs-icon {
+  font-size: 48px;
+}
+
+.coming-soon h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.coming-soon p {
+  font-size: 14px;
+}

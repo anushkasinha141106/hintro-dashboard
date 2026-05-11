@@ -1,0 +1,147 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  font-size: 16px;
+  color: var(--color-text-muted);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.star {
+  font-size: 32px;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: color 0.15s ease;
+  user-select: none;
+}
+
+.star.filled {
+  color: #f59e0b;
+}
+
+.feedback-form {
+  margin-bottom: 20px;
+}
+
+.feedback-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);
+}
+
+.feedback-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  color: var(--color-text-primary);
+}
+
+.feedback-form textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.back-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: white;
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+.back-btn:hover {
+  background: var(--color-primary-bg);
+}
+
+.submit-btn {
+  padding: 8px 20px;
+  background: var(--color-btn-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.success-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+  gap: 12px;
+}
+
+.success-star {
+  font-size: 52px;
+  margin-bottom: 8px;
+}
+
+.success-screen h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.success-screen p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  max-width: 280px;
+}

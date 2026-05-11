@@ -1,0 +1,61 @@
+:root {
+  --color-bg: #ffffff;
+  --color-sidebar: #ffffff;
+  --color-sidebar-border: #E2E2E8;
+  --color-card-border: rgba(0, 0, 0, 0.20);
+  --color-primary: #6686FF;
+  --color-primary-bg: rgba(102, 134, 255, 0.12);
+  --color-btn-primary: #000000;
+  --color-btn-upgrade: rgba(0, 0, 0, 0.50);
+  --color-text-primary: #000000;
+  --color-text-secondary: #555555;
+  --color-text-muted: #888888;
+  --color-border: #E2E2E8;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --sidebar-width: 262px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: #000000;
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  z-index: 9999;
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
