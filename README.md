@@ -5,7 +5,7 @@ A responsive React implementation of the Hintro frontend assignment. The project
 ## Live Access
 
  GitHub: [https://github.com/anushkasinha141106/hintro-dashboard](https://github.com/anushkasinha141106/hintro-dashboard)
-- Live App: [https://hintro-dashboard-app.vercel.app](https://hintro-dashboard-app.vercel.app)
+- Live App: [https://hintro-dashboard-app.vercel.app](https://hintro-dashboard-y83k.vercel.app)
 
 ## Login Access
 
