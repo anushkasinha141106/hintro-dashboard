@@ -9,6 +9,7 @@ const FeedbackModal = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false)
 
   const activeRating = hovered || rating
+  const feedbackTypeLabel = rating > 0 ? (rating <= 3 ? 'Negative feedback' : 'Positive feedback') : ''
 
   const handleSubmit = () => {
     if (rating === 0) return
@@ -38,7 +39,7 @@ const FeedbackModal = ({ onClose }) => {
             </div>
             <h3>Thank you for your feedback!!</h3>
             <p>
-              Our team reviews every suggestion to improve AI responses,
+              {feedbackTypeLabel} recorded successfully. Our team reviews every suggestion to improve AI responses,
               workflows, and overall experience.
             </p>
           </div>
@@ -70,19 +71,22 @@ const FeedbackModal = ({ onClose }) => {
         </div>
 
         {rating > 0 && (
-          <div className="feedback-form">
-            <label htmlFor="feedback-text">
-              {rating <= 3
-                ? 'What frustrated you or felt confusing?'
-                : 'What did you like the most?'}
-            </label>
-            <textarea
-              id="feedback-text"
-              value={text}
-              onChange={(event) => setText(event.target.value)}
-              rows={4}
-            />
-          </div>
+          <>
+            <p className="feedback-type-note">{feedbackTypeLabel} — {rating <= 3 ? '3 stars or less' : 'more than 3 stars'}</p>
+            <div className="feedback-form">
+              <label htmlFor="feedback-text">
+                {rating <= 3
+                  ? 'What frustrated you or felt confusing?'
+                  : 'What did you like the most?'}
+              </label>
+              <textarea
+                id="feedback-text"
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+                rows={4}
+              />
+            </div>
+          </>
         )}
 
         <div className="modal-actions">

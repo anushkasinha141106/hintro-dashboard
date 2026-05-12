@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PageHeader from '../components/Layout/PageHeader'
 import './FeedbackHistory.css'
 
-const TABLE_HEADINGS = ['Title', 'Rating', 'Description', 'Date', 'Time']
+const TABLE_HEADINGS = ['Title', 'Type', 'Rating', 'Description', 'Date', 'Time']
 
 const getOrdinal = (day) => {
   if (day > 3 && day < 21) return 'th'
@@ -55,6 +55,7 @@ const FeedbackHistory = () => {
             {feedbacks.map((feedback) => (
               <div key={feedback.id} className="fh-table-row" role="row">
                 <span>{feedback.title || 'My First Call'}</span>
+                <span>{feedback.type ? feedback.type.charAt(0).toUpperCase() + feedback.type.slice(1) : (feedback.rating <= 3 ? 'Negative' : 'Positive')}</span>
                 <span>{feedback.rating}/5</span>
                 <span>- {feedback.text ? `${feedback.text.slice(0, 22)}${feedback.text.length > 22 ? '...' : ''}` : 'No details...'}</span>
                 <span>{formatFeedbackDate(feedback.date)}</span>

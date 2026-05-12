@@ -50,6 +50,13 @@
   line-height: 1;
 }
 
+.feedback-type-note {
+  color: #3f3f46;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
 .star-rating {
   display: flex;
   justify-content: center;

@@ -20,7 +20,7 @@
 .fh-table-head,
 .fh-table-row {
   display: grid;
-  grid-template-columns: 1.06fr 1.05fr 1.2fr 1.1fr 0.35fr;
+  grid-template-columns: 1.04fr 0.7fr 1fr 1.3fr 1.1fr 0.35fr;
   align-items: center;
   column-gap: 20px;
   padding: 0 16px;
