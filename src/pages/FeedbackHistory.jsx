@@ -1,67 +1,69 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import PageHeader from '../components/Layout/PageHeader'
 import './FeedbackHistory.css'
 
-const StarDisplay = ({ rating }) => (
-  <div className="star-display">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <span key={star} className={`star-small ${star <= rating ? 'filled' : ''}`}>★</span>
-    ))}
-  </div>
+const TABLE_HEADINGS = ['Title', 'Rating', 'Description', 'Date', 'Time']
+
+const getOrdinal = (day) => {
+  if (day > 3 && day < 21) return 'th'
+  return ['th', 'st', 'nd', 'rd'][day % 10] || 'th'
+}
+
+const formatFeedbackDate = (isoString) => {
+  const date = new Date(isoString)
+  const day = date.getDate()
+  return `${day}${getOrdinal(day)} ${date.toLocaleDateString('en-GB', {
+    month: 'long',
+    year: 'numeric',
+  })}`
+}
+
+const formatFeedbackTime = (isoString) => (
+  new Date(isoString)
+    .toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    })
+    .toLowerCase()
 )
 
 const FeedbackHistory = () => {
-  const [feedbacks, setFeedbacks] = useState([])
-
-  useEffect(() => {
+  const [feedbacks] = useState(() => {
     const saved = JSON.parse(localStorage.getItem('hintro_feedback') || '[]')
-    setFeedbacks(saved)
-  }, [])
-
-  const formatFeedbackDate = (isoString) => {
-    return new Date(isoString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    }) + ' · ' + new Date(isoString).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    })
-  }
+    return saved
+  })
 
   return (
-    <div className="feedback-history">
-      <div className="fh-header">
-        <h1>Feedback History</h1>
-        <p>Review your previous feedbacks.</p>
-      </div>
+    <div className="page-shell feedback-history">
+      <PageHeader title="Feedback History" />
 
-      {feedbacks.length === 0 && (
-        <div className="fh-empty">
-          <div className="fh-empty-icon">💬</div>
-          <p className="fh-empty-title">No feedback yet</p>
-          <p className="fh-empty-sub">Your submitted feedbacks will appear here.</p>
-        </div>
-      )}
+      <main className="fh-content">
+        <p className="fh-subtitle">Browse your previous feedback submissions</p>
 
-      <div className="fh-list">
-        {feedbacks.map((fb) => (
-          <div key={fb.id} className="fh-card">
-            <div className="fh-card-top">
-              <div>
-                <p className="fh-card-title">
-                  {fb.type === 'positive' ? 'Positive Feedback' : 'Negative Feedback'}
-                </p>
-                <p className="fh-card-date">{formatFeedbackDate(fb.date)}</p>
-              </div>
-              <StarDisplay rating={fb.rating} />
-            </div>
-            {fb.text && (
-              <p className="fh-card-text">{fb.text}</p>
-            )}
+        {feedbacks.length === 0 ? (
+          <div className="fh-empty-table">
+            <p>No feedback submissions yet.</p>
           </div>
-        ))}
-      </div>
+        ) : (
+          <div className="fh-table" role="table">
+            <div className="fh-table-head" role="row">
+              {TABLE_HEADINGS.map((heading) => (
+                <span key={heading} role="columnheader">{heading}</span>
+              ))}
+            </div>
+            {feedbacks.map((feedback) => (
+              <div key={feedback.id} className="fh-table-row" role="row">
+                <span>{feedback.title || 'My First Call'}</span>
+                <span>{feedback.rating}/5</span>
+                <span>- {feedback.text ? `${feedback.text.slice(0, 22)}${feedback.text.length > 22 ? '...' : ''}` : 'No details...'}</span>
+                <span>{formatFeedbackDate(feedback.date)}</span>
+                <span>{formatFeedbackTime(feedback.date)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   )
 }

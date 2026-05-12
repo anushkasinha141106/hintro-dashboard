@@ -1,21 +1,53 @@
+import { CalendarDays, MoreVertical } from 'lucide-react'
+import PageHeader from '../components/Layout/PageHeader'
 import { useUser } from '../context/UserContext'
 import useFetch from '../hooks/useFetch'
-import { formatDuration, formatLastSession, formatDate } from '../utils/formatters'
-import { PieChart, Clock, Sparkles, CalendarDays } from 'lucide-react'
 import useToast from '../hooks/useToast'
+import { formatDuration, formatLastSession, formatDate } from '../utils/formatters'
 import './Dashboard.css'
 
-const StatCard = ({ icon, label, value, iconBg, iconColor }) => (
-  <div className="stat-card">
-    <div className="stat-icon" style={{ backgroundColor: iconBg }}>
-      {icon(iconColor)}
+const STAT_ITEMS = [
+  {
+    label: 'Total Sessions',
+    key: 'totalSessions',
+    icon: 'totalsessionslogo.svg',
+  },
+  {
+    label: 'Average Duration',
+    key: 'averageDuration',
+    icon: 'averagedurationlogo.svg',
+  },
+  {
+    label: 'AI Used',
+    key: 'totalAIInteractions',
+    icon: 'aiusedlogo.svg',
+  },
+  {
+    label: 'Last Session',
+    key: 'lastSession',
+    icon: 'LastSessionlogo.svg',
+  },
+]
+
+const StatCard = ({ item, value }) => {
+  return (
+    <div className="stat-card">
+      <img className="stat-icon" src={`/assets/dashboard/${item.icon}`} alt="" />
+      <div className="stat-copy">
+        <span className="stat-label">{item.label}</span>
+        <strong className="stat-value">{value}</strong>
+      </div>
     </div>
-    <div className="stat-info">
-      <span className="stat-label">{label}</span>
-      <span className="stat-value">{value}</span>
-    </div>
-  </div>
-)
+  )
+}
+
+const getStatValue = (item, statsData, loading) => {
+  if (loading) return '...'
+  if (item.key === 'averageDuration') return formatDuration(statsData?.averageDuration)
+  if (item.key === 'totalAIInteractions') return `${statsData?.totalAIInteractions ?? 0} times`
+  if (item.key === 'lastSession') return formatLastSession(statsData?.lastSession)
+  return statsData?.totalSessions ?? 0
+}
 
 const Dashboard = () => {
   const { client, userId } = useUser()
@@ -36,145 +68,110 @@ const Dashboard = () => {
     [userId]
   )
 
-  const groupByDate = (sessions) => {
-    const groups = {}
-    sessions.forEach(session => {
-      const date = formatDate(session.started_at)
-      if (!groups[date]) groups[date] = []
-      groups[date].push(session)
-    })
-    return groups
-  }
+  const sessions = sessionsData?.callSessions ?? []
+  const firstName = profileData?.firstName || profileData?.name || '{{Name}}'
 
-  const stats = [
-    {
-      label: 'Total Sessions',
-      value: statsLoading ? '...' : statsData?.totalSessions ?? 0,
-      icon: (color) => <PieChart size={20} color={color} />,
-      iconBg: '#fde8e8',
-      iconColor: '#e05252'
-    },
-    {
-      label: 'Average Duration',
-      value: statsLoading ? '...' : formatDuration(statsData?.averageDuration),
-      icon: (color) => <Clock size={20} color={color} />,
-      iconBg: '#e0f4f4',
-      iconColor: '#3a9ea5'
-    },
-    {
-      label: 'AI Used',
-      value: statsLoading ? '...' : `${statsData?.totalAIInteractions ?? 0} times`,
-      icon: (color) => <Sparkles size={20} color={color} />,
-      iconBg: '#e6f9e6',
-      iconColor: '#3a9a3a'
-    },
-    {
-      label: 'Last Session',
-      value: statsLoading ? '...' : formatLastSession(statsData?.lastSession),
-      icon: (color) => <CalendarDays size={20} color={color} />,
-      iconBg: '#ede8fb',
-      iconColor: '#7c52cc'
-    }
-  ]
+  const groupedSessions = sessions.reduce((groups, session) => {
+    const date = formatDate(session.started_at)
+    if (!groups[date]) groups[date] = []
+    groups[date].push(session)
+    return groups
+  }, {})
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Dashboard</h1>
-        <div className="header-right">
+    <div className="page-shell dashboard">
+      <PageHeader title="Dashboard" />
+
+      <section className="dashboard-content">
+        <div className="welcome-section">
+          <div>
+            <h2>Hi, {firstName} <span aria-hidden="true">👋</span> Welcome to Hintro</h2>
+            <p>Ready to make your next call smarter ?</p>
+          </div>
           <button
-            className="watch-btn"
-            onClick={() => showToast('Tutorial coming soon!')}
+            className="start-call-btn"
+            onClick={() => showToast('Starting a new call...')}
           >
-            ▶ Watch Tutorial
+            Start New Call
           </button>
-          <div className="avatar">
-            {profileData?.firstName?.[0] || 'U'}
-          </div>
         </div>
-      </div>
 
-      <div className="welcome-section">
-        <div>
-          <h2>Hi, {profileData?.firstName || '...'} 👋 Welcome to Hintro</h2>
-          <p>Ready to make your next call smarter?</p>
+        <div className="stats-grid">
+          {STAT_ITEMS.map((item) => (
+            <StatCard
+              key={item.label}
+              item={item}
+              value={getStatValue(item, statsData, statsLoading)}
+            />
+          ))}
         </div>
-        <button
-          className="start-call-btn"
-          onClick={() => showToast('Starting a new call...')}
-        >
-          Start New Call
-        </button>
-      </div>
 
-      <div className="stats-grid">
-        {stats.map((stat) => (
-          <StatCard
-            key={stat.label}
-            icon={stat.icon}
-            label={stat.label}
-            value={stat.value}
-            iconBg={stat.iconBg}
-            iconColor={stat.iconColor}
-          />
-        ))}
-      </div>
+        <section className="recent-calls">
+          <h3>Recent calls</h3>
 
-      <div className="recent-calls">
-        <h3>Recent calls</h3>
+          {sessionsLoading && <p className="loading-text">Loading...</p>}
 
-        {sessionsLoading && <p className="loading-text">Loading...</p>}
-
-        {!sessionsLoading && sessionsData?.callSessions?.length === 0 && (
-          <div className="empty-state">
-            <div className="empty-icon">
-              <CalendarDays size={40} color="#7c52cc" />
+          {!sessionsLoading && sessions.length === 0 && (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <CalendarDays size={22} strokeWidth={2.2} />
+              </div>
+              <p className="empty-title">No Recent Calls</p>
+              <p className="empty-sub">
+                Connect your Google Calendar to see upcoming meetings,
+                get reminders, and join calls directly from Hintro.
+              </p>
+              <button
+                className="empty-call-btn"
+                onClick={() => showToast('Starting a new call...')}
+              >
+                Start a Call
+              </button>
             </div>
-            <p className="empty-title">No Recent Calls</p>
-            <p className="empty-sub">
-              Connect your Google Calendar to see your upcoming meetings
-              and start calls directly from there.
-            </p>
-            <button
-              className="start-call-btn"
-              onClick={() => showToast('Starting a new call...')}
-            >
-              Start a Call
-            </button>
-          </div>
-        )}
+          )}
 
-        {!sessionsLoading && sessionsData?.callSessions?.length > 0 && (
-          Object.entries(groupByDate(sessionsData.callSessions)).map(([date, sessions]) => (
-            <div key={date} className="date-group">
-              <p className="date-label">{date}</p>
-              {sessions.map(session => (
-                <div key={session._id} className="call-row">
-                  <div className="call-avatar">
-                    {session.client?.[0] || 'K'}
-                  </div>
-                  <div className="call-info">
-                    <p className="call-name">{session.description || 'Design Call'}</p>
-                    <p className="call-participants">
-                      {session.participants?.map(p => p.name).join(', ')}
-                    </p>
-                  </div>
-                  <div className="call-meta">
-                    <span className="call-time">
-                      {new Date(session.started_at).toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        hour12: true
-                      })}
-                    </span>
-                    <button className="call-menu">⋮</button>
-                  </div>
+          {!sessionsLoading && sessions.length > 0 && (
+            <div className="call-list">
+              {Object.entries(groupedSessions).map(([date, dateSessions]) => (
+                <div key={date} className="date-group">
+                  <p className="date-label">{date}</p>
+                  {dateSessions.map((session) => (
+                    <div key={session._id || session.id} className="call-row">
+                      <div className="call-avatar">
+                        {(session.client || session.title || 'K')[0]}
+                      </div>
+                      <div className="call-info">
+                        <p className="call-name">{session.description || session.title || 'Design Call'}</p>
+                        <div className="participant-stack">
+                          {(session.participants?.length ? session.participants : [{ name: 'A' }, { name: 'B' }, { name: 'C' }])
+                            .slice(0, 3)
+                            .map((participant, index) => (
+                              <span key={`${participant.name}-${index}`} className="participant-avatar">
+                                <img src="/assets/dashboard/profilepicutre.png" alt="" />
+                              </span>
+                            ))}
+                        </div>
+                      </div>
+                      <div className="call-meta">
+                        <span>
+                          {new Date(session.started_at).toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          }).toLowerCase()}
+                        </span>
+                        <button className="call-menu" aria-label="Call menu">
+                          <MoreVertical size={19} strokeWidth={3} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))
-        )}
-      </div>
+          )}
+        </section>
+      </section>
 
       {toast && <div className="toast">{toast}</div>}
     </div>

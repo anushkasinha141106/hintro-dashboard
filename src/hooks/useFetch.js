@@ -6,8 +6,11 @@ const useFetch = (fetchFn, deps = []) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
-    setData(null)
+    queueMicrotask(() => {
+      setLoading(true)
+      setData(null)
+      setError(null)
+    })
     fetchFn()
       .then(res => setData(res.data))
       .catch(err => setError(err))

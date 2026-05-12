@@ -3,13 +3,15 @@ import Layout from './components/Layout/Layout'
 import Dashboard from './pages/Dashboard'
 import FeedbackHistory from './pages/FeedbackHistory'
 import ComingSoon from './pages/ComingSoon'
+import Login from './pages/Login'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route index element={<Navigate to="/login" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="feedback-history" element={<FeedbackHistory />} />
           <Route path="call-insights" element={<ComingSoon pageName="Call Insights" />} />

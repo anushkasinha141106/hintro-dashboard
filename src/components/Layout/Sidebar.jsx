@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useUser } from '../../context/UserContext'
+import { Info } from 'lucide-react'
 import FeedbackModal from '../Feedback/FeedbackModal'
 import useToast from '../../hooks/useToast'
 import './Sidebar.css'
 
+const ASSET_BASE = '/assets/dashboard/'
+
 const NAV_ITEMS = [
-  { label: 'Dashboard', path: '/dashboard', icon: '⊞' },
-  { label: 'Call Insights', path: '/call-insights', icon: '📞' },
-  { label: 'Knowledge Base', path: '/knowledge-base', icon: '📄' },
-  { label: 'Prompts', path: '/prompts', icon: '💬' },
-  { label: 'Boxy Controls', path: '/boxy-controls', icon: '⊙' },
+  { label: 'Dashboard', path: '/dashboard', icon: 'dashboardicon.svg' },
+  { label: 'Call Insights', path: '/call-insights', icon: 'phone.svg' },
+  { label: 'Knowledge Base', path: '/knowledge-base', icon: 'knowledgebaselogo.svg', info: true },
+  { label: 'Prompts', path: '/prompts', icon: 'promptslogo.svg', info: true },
+  { label: 'Boxy Controls', path: '/boxy-controls', icon: 'boxycontrolslogo.svg', info: true },
 ]
 
 const Sidebar = () => {
-  const { userId, setUserId } = useUser()
   const [showFeedback, setShowFeedback] = useState(false)
   const { toast, showToast } = useToast()
 
@@ -31,8 +32,9 @@ const Sidebar = () => {
                 `sidebar-nav-item ${isActive ? 'active' : ''}`
               }
             >
-              <span className="nav-icon">{item.icon}</span>
+              <img className="nav-icon" src={`${ASSET_BASE}${item.icon}`} alt="" />
               <span>{item.label}</span>
+              {item.info && <Info className="nav-info" size={16} strokeWidth={2.3} />}
             </NavLink>
           ))}
         </nav>
@@ -45,17 +47,18 @@ const Sidebar = () => {
             `sidebar-nav-item ${isActive ? 'active' : ''}`
           }
         >
-          <span className="nav-icon">🕐</span>
+          <img className="nav-icon" src={`${ASSET_BASE}feedbackhistorylogo.svg`} alt="" />
           <span>Feedback History</span>
         </NavLink>
 
-        <div
-          className="sidebar-nav-item"
+        <button
+          type="button"
+          className="sidebar-nav-item sidebar-action"
           onClick={() => setShowFeedback(true)}
         >
-          <span className="nav-icon">🎁</span>
+          <img className="nav-icon" src={`${ASSET_BASE}feedbacklogo.svg`} alt="" />
           <span>Feedback</span>
-        </div>
+        </button>
 
         <button
           className="upgrade-btn"
@@ -63,20 +66,6 @@ const Sidebar = () => {
         >
           Upgrade
         </button>
-
-        <div className="user-switcher">
-          <span>Switch User:</span>
-          <div className="switcher-btns">
-            <button
-              onClick={() => setUserId('u1')}
-              className={userId === 'u1' ? 'active' : ''}
-            >u1</button>
-            <button
-              onClick={() => setUserId('u2')}
-              className={userId === 'u2' ? 'active' : ''}
-            >u2</button>
-          </div>
-        </div>
       </div>
 
       {showFeedback && (

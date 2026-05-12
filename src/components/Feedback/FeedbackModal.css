@@ -1,87 +1,104 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--color-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
-.modal {
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  width: 100%;
-  max-width: 440px;
+.feedback-modal {
+  width: 578px;
+  min-height: 286px;
+  background: #ffffff;
+  border-radius: 7px;
+  padding: 45px 35px 44px;
   position: relative;
+}
+
+.feedback-modal-filled {
+  min-height: 424px;
+  padding-top: 39px;
+}
+
+.feedback-modal-success {
+  width: 558px;
+  min-height: 365px;
+  padding: 30px 38px;
 }
 
 .modal-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  font-size: 16px;
-  color: var(--color-text-muted);
+  top: 30px;
+  right: 36px;
+  background: transparent;
+  color: #000000;
+  display: flex;
 }
 
 .modal-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 5px;
 }
 
 .modal-subtitle {
+  color: #a0a0a0;
   font-size: 13px;
-  color: var(--color-text-muted);
-  margin-bottom: 20px;
+  line-height: 1;
 }
 
 .star-rating {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
+  justify-content: center;
+  gap: 15px;
+  margin: 43px 0 43px;
+}
+
+.feedback-modal-filled .star-rating {
+  margin: 34px 0 25px;
 }
 
 .star {
-  font-size: 32px;
-  cursor: pointer;
-  color: #d1d5db;
+  width: 41px;
+  height: 41px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #d9d9d9;
   transition: color 0.15s ease;
-  user-select: none;
 }
 
 .star.filled {
-  color: #f59e0b;
+  color: #ffc400;
 }
 
 .feedback-form {
-  margin-bottom: 20px;
+  margin-bottom: 31px;
 }
 
 .feedback-form label {
   display: block;
+  color: #969696;
   font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: var(--color-text-primary);
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
 .feedback-form textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  height: 120px;
+  padding: 11px 12px;
+  border: 1px solid #dfe5ea;
+  border-radius: 4px;
+  color: #111111;
+  background: #ffffff;
   font-size: 13px;
-  font-family: inherit;
   resize: none;
   outline: none;
-  color: var(--color-text-primary);
-}
-
-.feedback-form textarea:focus {
-  border-color: var(--color-primary);
 }
 
 .modal-actions {
@@ -91,57 +108,76 @@
 }
 
 .back-btn {
-  padding: 8px 16px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: white;
+  width: 84px;
+  height: 32px;
+  border: 1px solid #777777;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #000000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   font-size: 13px;
-  color: var(--color-text-primary);
-}
-
-.back-btn:hover {
-  background: var(--color-primary-bg);
 }
 
 .submit-btn {
-  padding: 8px 20px;
-  background: var(--color-btn-primary);
-  color: white;
-  border-radius: var(--radius-md);
+  width: 73px;
+  height: 34px;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 500;
 }
 
 .submit-btn:disabled {
-  opacity: 0.4;
+  background: #898989;
   cursor: not-allowed;
 }
 
-.submit-btn:hover:not(:disabled) {
-  opacity: 0.85;
-}
-
 .success-screen {
+  min-height: 303px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 20px 0;
-  gap: 12px;
 }
 
 .success-star {
-  font-size: 52px;
-  margin-bottom: 8px;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: #fff0ad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 36px;
 }
 
 .success-screen h3 {
-  font-size: 18px;
+  font-size: 21px;
+  line-height: 1;
   font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .success-screen p {
+  max-width: 363px;
+  color: #999999;
   font-size: 13px;
-  color: var(--color-text-muted);
-  max-width: 280px;
+  line-height: 1.2;
+}
+
+@media (max-width: 680px) {
+  .feedback-modal,
+  .feedback-modal-success {
+    width: calc(100vw - 32px);
+    padding: 32px 24px;
+  }
+
+  .star-rating {
+    gap: 8px;
+  }
 }
